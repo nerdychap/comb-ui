@@ -10,7 +10,7 @@ import { useClipboard } from "@/hooks/use-clipboard";
 import { useTheme } from "@/hooks/use-theme";
 
 export default function GeneratorView() {
-  const { content, isLoading, error, startStream, resetStream } = useStream();
+  const { content, isLoading, error, startStream, abortStream, resetStream } = useStream();
   const { copyToClipboard, isCopied } = useClipboard();
   const { theme, toggleTheme } = useTheme();
 
@@ -39,7 +39,7 @@ export default function GeneratorView() {
         <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </header>
 
-      <PromptInput onSubmit={handleSubmit} isLoading={isLoading} />
+      <PromptInput onSubmit={handleSubmit} isLoading={isLoading} onCancel={abortStream} />
 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">

@@ -23,6 +23,8 @@ export function useStream(): UseStreamResult {
       abortRef.current = null;
     }
     setIsLoading(false);
+    setContent("");
+    setError(null);
   }, []);
 
   const startStream = useCallback(

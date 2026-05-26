@@ -3,9 +3,10 @@
 type PromptInputProps = {
   onSubmit: (prompt: string) => void;
   isLoading: boolean;
+  onCancel?: () => void;
 };
 
-export default function PromptInput({ onSubmit, isLoading }: PromptInputProps) {
+export default function PromptInput({ onSubmit, isLoading, onCancel }: PromptInputProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -26,13 +27,23 @@ export default function PromptInput({ onSubmit, isLoading }: PromptInputProps) {
         disabled={isLoading}
         autoComplete="off"
       />
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-      >
-        {isLoading ? "Generating..." : "Generate"}
-      </button>
+      {isLoading ? (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-lg border border-red-300 bg-white px-6 py-3 text-sm font-medium text-red-600 shadow-sm transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:border-red-800 dark:bg-red-950 dark:text-red-400 dark:hover:bg-red-900"
+        >
+          Cancel
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="rounded-lg bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        >
+          Generate
+        </button>
+      )}
     </form>
   );
 }
