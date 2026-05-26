@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import PromptInput from "@/components/prompt-input";
 import LivePreviewWrapper from "@/components/live-preview-wrapper";
 import StreamComponent from "@/components/stream-component";
@@ -13,17 +12,6 @@ export default function GeneratorView() {
   const { content, isLoading, error, startStream, abortStream, resetStream } = useStream();
   const { copyToClipboard, isCopied } = useClipboard();
   const { theme, toggleTheme } = useTheme();
-
-  const handleSubmit = useCallback(
-    (prompt: string) => {
-      startStream(prompt);
-    },
-    [startStream]
-  );
-
-  const handleCopy = useCallback(() => {
-    copyToClipboard(content);
-  }, [content, copyToClipboard]);
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 sm:p-6">
@@ -39,7 +27,7 @@ export default function GeneratorView() {
         <ThemeToggle theme={theme} onToggle={toggleTheme} />
       </header>
 
-      <PromptInput onSubmit={handleSubmit} isLoading={isLoading} onCancel={abortStream} />
+      <PromptInput onSubmit={startStream} isLoading={isLoading} onCancel={abortStream} />
 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">
@@ -63,7 +51,7 @@ export default function GeneratorView() {
             {content && (
               <button
                 type="button"
-                onClick={handleCopy}
+                onClick={() => copyToClipboard(content)}
                 className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
               >
                 {isCopied ? "Copied!" : "Copy"}

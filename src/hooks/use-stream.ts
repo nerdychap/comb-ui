@@ -30,8 +30,6 @@ export function useStream(): UseStreamResult {
   const startStream = useCallback(
     async (prompt: string) => {
       abortStream();
-      setContent("");
-      setError(null);
       setIsLoading(true);
 
       const controller = new AbortController();
@@ -93,8 +91,6 @@ export function useStream(): UseStreamResult {
 
   const resetStream = useCallback(() => {
     abortStream();
-    setContent("");
-    setError(null);
   }, [abortStream]);
 
   return { content, isLoading, error, startStream, abortStream, resetStream };
