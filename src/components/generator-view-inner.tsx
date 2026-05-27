@@ -13,6 +13,12 @@ export default function GeneratorViewInner() {
   const { copyToClipboard, isCopied } = useClipboard();
   const { theme, toggleTheme } = useTheme();
 
+  const handleCopy = () => {
+    if (content) {
+      copyToClipboard(content);
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 sm:p-6">
       <header className="flex items-center justify-between">
@@ -45,26 +51,22 @@ export default function GeneratorViewInner() {
       <div className="flex flex-1 flex-col gap-4 overflow-hidden lg:flex-row lg:gap-6">
         <div className="flex min-h-75 max-h-[70vh] flex-[1_1_0%] flex-col gap-2 overflow-hidden min-w-0 lg:min-h-0">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-              Code
-            </h2>
-            {content && (
-              <button
-                type="button"
-                onClick={() => copyToClipboard(content)}
-                className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
-              >
-                {isCopied ? "Copied!" : "Copy"}
-              </button>
-            )}
+            <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Code</h2>
+
+            <button
+              type="button"
+              disabled={content.length === 0}
+              onClick={handleCopy}
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+            >
+              {isCopied ? "Copied!" : "Copy"}
+            </button>
           </div>
           <StreamCodeDisplay />
         </div>
 
         <div className="flex min-h-75 max-h-[70vh] flex-[1_1_0%] flex-col gap-2 overflow-hidden min-w-0 lg:min-h-0">
-          <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-            Preview
-          </h2>
+          <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Preview</h2>
           <LivePreviewWrapper code={!isLoading ? content : ""} isLoading={isLoading} />
         </div>
       </div>
