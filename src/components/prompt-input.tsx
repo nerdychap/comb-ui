@@ -7,7 +7,7 @@ type PromptInputProps = {
 };
 
 export default function PromptInput({ onSubmit, isLoading, onCancel }: PromptInputProps) {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const prompt = formData.get("prompt") as string;
@@ -15,6 +15,11 @@ export default function PromptInput({ onSubmit, isLoading, onCancel }: PromptInp
     if (prompt.trim().length > 0) {
       onSubmit(prompt.trim());
     }
+  };
+
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onCancel?.();
   };
 
   return (
@@ -30,7 +35,7 @@ export default function PromptInput({ onSubmit, isLoading, onCancel }: PromptInp
       {isLoading ? (
         <button
           type="button"
-          onClick={onCancel}
+          onClick={handleCancel}
           className="rounded-lg border border-red-300 bg-white px-6 py-3 text-sm font-medium text-red-600 shadow-sm transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:border-red-800 dark:bg-red-950 dark:text-red-400 dark:hover:bg-red-900"
         >
           Cancel
