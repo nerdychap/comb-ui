@@ -5,9 +5,16 @@ import StreamLoadingState from "@/components/stream-loading-state";
 import { PANEL_BG, PANEL_BORDER } from "@/constants/contants";
 import { useStreamContext } from "@/hooks/use-stream-context";
 import { Highlight, themes, type Language } from "prism-react-renderer";
+import { useEffect, useRef } from "react";
 
 export default function StreamCodeDisplay() {
   const { content, isLoading } = useStreamContext();
+  const preRef = useRef<HTMLPreElement>(null);
+
+  useEffect(() => {
+    if (!isLoading || !preRef.current) return;
+    preRef.current.scrollTop = preRef.current.scrollHeight;
+  }, [content, isLoading]);
 
   if (!content && !isLoading) {
     return <StreamEmptyState />;
@@ -22,6 +29,7 @@ export default function StreamCodeDisplay() {
       <Highlight theme={themes.nightOwl} code={content} language={"tsx" as Language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
+            ref={preRef}
             className={`h-full overflow-y-auto rounded-lg border p-4 text-sm leading-relaxed ${className}`}
             style={{
               ...style,

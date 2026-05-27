@@ -1,11 +1,12 @@
 "use client";
 
-import PromptInput from "@/components/prompt-input";
 import LivePreviewWrapper from "@/components/live-preview-wrapper";
+import PromptInput from "@/components/prompt-input";
+import ResizableSplit from "@/components/resizable-split";
 import StreamCodeDisplay from "@/components/stream-code-display";
 import ThemeToggle from "@/components/theme-toggle";
-import { useStreamContext } from "@/hooks/use-stream-context";
 import { useClipboard } from "@/hooks/use-clipboard";
+import { useStreamContext } from "@/hooks/use-stream-context";
 import { useTheme } from "@/hooks/use-theme";
 
 export default function GeneratorViewInner() {
@@ -48,28 +49,31 @@ export default function GeneratorViewInner() {
         </div>
       )}
 
-      <div className="flex flex-1 flex-col gap-4 overflow-hidden lg:flex-row lg:gap-6">
-        <div className="flex min-h-75 max-h-[70vh] flex-[1_1_0%] flex-col gap-2 overflow-hidden min-w-0 lg:min-h-0">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Code</h2>
+      <ResizableSplit
+        left={
+          <div className="flex min-h-75 max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Code</h2>
 
-            <button
-              type="button"
-              disabled={content.length === 0}
-              onClick={handleCopy}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
-            >
-              {isCopied ? "Copied!" : "Copy"}
-            </button>
+              <button
+                type="button"
+                disabled={content.length === 0}
+                onClick={handleCopy}
+                className="rounded-md border border-zinc-300 bg-white px-3 text-xs font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+              >
+                {isCopied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <StreamCodeDisplay />
           </div>
-          <StreamCodeDisplay />
-        </div>
-
-        <div className="flex min-h-75 max-h-[70vh] flex-[1_1_0%] flex-col gap-2 overflow-hidden min-w-0 lg:min-h-0">
-          <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Preview</h2>
-          <LivePreviewWrapper code={!isLoading ? content : ""} isLoading={isLoading} />
-        </div>
-      </div>
+        }
+        right={
+          <div className="flex min-h-75 max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
+            <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Preview</h2>
+            <LivePreviewWrapper code={!isLoading ? content : ""} isLoading={isLoading} />
+          </div>
+        }
+      />
     </div>
   );
 }
