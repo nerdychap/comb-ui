@@ -75,6 +75,12 @@ These are **hard rules** for all code under `src/`.
 - Use `console.error` for logging failures.
 - Wrap react-live rendered components in an `ErrorBoundary`.
 
+## CI / GitHub Actions
+
+- A **pull request workflow** (`.github/workflows/pull-request.yml`) runs on every PR to `main`.
+- It executes **lint**, **test**, and **build** steps in order using Node.js 20 with `npm ci`.
+- Always verify the workflow passes locally before pushing: `npm run lint && npm test && npm run build`.
+
 ## Testing
 
 - **Vitest** as the test runner.

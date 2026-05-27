@@ -8,26 +8,32 @@ Generate React components from text prompts. Describe what you want and watch th
 src/
 ├── app/api/generate/route.ts   # Streaming API endpoint (OpenRouter)
 ├── components/
-│   ├── generator-view-inner.tsx # Main view with code & preview panes
-│   ├── generator-view.tsx       # Wraps inner view in StreamProvider
-│   ├── prompt-input.tsx         # Prompt input form
-│   ├── stream-code-display.tsx  # Real-time code display with states
-│   ├── stream-empty-state.tsx   # Empty placeholder state
-│   ├── stream-loading-state.tsx # Loading indicator state
-│   ├── live-preview-wrapper.tsx # react-live render panel
-│   └── error-boundary.tsx       # Error boundary for live preview
+│   ├── error-boundary.tsx         # Error boundary for live preview
+│   ├── generator-view.tsx         # Wraps inner view in StreamProvider
+│   ├── generator-view-inner.tsx   # Main view with code & preview panes
+│   ├── live-preview-wrapper.tsx   # react-live render panel
+│   ├── prompt-input.tsx           # Prompt input form
+│   ├── resizable-split.tsx        # Draggable split pane for code/preview
+│   ├── stream-code-display.tsx    # Real-time code display with states
+│   ├── stream-empty-state.tsx     # Empty placeholder state
+│   ├── stream-loading-state.tsx   # Loading indicator state
+│   ├── stream-state-panel.tsx     # Streaming status overview panel
+│   └── theme-toggle.tsx           # Dark/light mode toggle
 ├── context/
-│   └── stream-context.ts        # Context definition + type
+│   └── stream-context.ts          # Context definition + type
 ├── providers/
-│   └── stream-provider.tsx      # Provider component
+│   └── stream-provider.tsx        # Provider component
 ├── hooks/
-│   ├── use-stream.ts            # Streaming state management hook
-│   ├── use-stream-context.tsx   # Consumer hook
-│   └── use-clipboard.ts         # Clipboard copy hook
+│   ├── use-clipboard.ts           # Clipboard copy hook
+│   ├── use-stream.ts              # Streaming state management hook
+│   ├── use-stream-context.tsx     # Consumer hook
+│   └── use-theme.ts               # Dark/light mode hook
 ├── lib/
-│   ├── stream-parser.ts         # SSE stream parser
-│   ├── rate-limiter.ts          # In-memory sliding window rate limiter
-│   └── sanitize.ts              # Prompt sanitization & HTML escaping
+│   ├── clean-generated-code.ts    # Post-processing of LLM output
+│   ├── ensure-render-call.ts      # Ensures render() call in generated code
+│   ├── rate-limiter.ts            # In-memory sliding window rate limiter
+│   ├── sanitize.ts                # Prompt sanitization & HTML escaping
+│   └── stream-parser.ts           # SSE stream parser
 └── test/                        # Vitest unit tests
 ```
 
@@ -38,6 +44,7 @@ src/
 - **TanStack Query** - server state management
 - **Tailwind CSS v4** - utility-first styling
 - **Vitest** - unit tests for stream parser, hooks, and utilities
+- **GitHub Actions** - CI pipeline (lint → test → build) on every PR to `main`
 
 ## How It Works
 
