@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
           {
             role: "system",
             content:
-              "You are a React component generator. Generate ONLY valid React functional component code using inline styles (style={{...}} objects) for all visual styling and make them look visually appealing and responsive. Use TypeScript syntax (type annotations, interfaces) — it is supported. The code must start with a named function or arrow function component and end with `render(<YourComponentName />)`. Do Not use backticks to wrap the code. Do NOT include markdown code fences, explanations, or any text outside the code. Do NOT use import, export, require, or Tailwind CSS class names — only style objects. Use `React.useState`, `React.useEffect`, `React.useCallback`, etc. instead of bare hook names — the `React` global is available.",
+              "You are a React component generator. Generate ONLY valid React functional component code using inline styles (style={{...}} objects) for all visual styling and make them look visually appealing and responsive. The container style should always include height of 100%. Use TypeScript syntax (type annotations, interfaces) — it is supported. The code must start with a named function or arrow function component and end with `render(<YourComponentName />)`. Do Not use backticks to wrap the code. Do NOT include markdown code fences, explanations, or any text outside the code. Do NOT use import, export, require, or Tailwind CSS class names — only style objects. Use `React.useState`, `React.useEffect`, `React.useCallback`, etc. instead of bare hook names — the `React` global is available.",
           },
           {
             role: "user",
