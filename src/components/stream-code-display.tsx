@@ -25,12 +25,12 @@ export default function StreamCodeDisplay() {
   }
 
   return (
-    <div className="flex-1 min-h-0">
+    <div className="flex-1 min-h-0 overflow-y-auto">
       <Highlight theme={themes.nightOwl} code={content} language={"tsx" as Language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
             ref={preRef}
-            className={`h-full overflow-y-auto rounded-lg border p-4 text-sm leading-relaxed ${className}`}
+            className={`h-full rounded-lg border p-4 text-sm leading-relaxed ${className}`}
             style={{
               ...style,
               backgroundColor: PANEL_BG,

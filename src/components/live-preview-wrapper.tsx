@@ -43,7 +43,7 @@ export default function LivePreviewWrapper({ code, isLoading = false }: LivePrev
 
   return (
     <div
-      className="min-h-0 flex-1 overflow-hidden rounded-lg border"
+      className="min-h-0 flex-1 overflow-y-auto rounded-lg border"
       style={{ backgroundColor: PANEL_BG, borderColor: "#3f3f46" }}
     >
       <ErrorBoundary>
@@ -53,7 +53,7 @@ export default function LivePreviewWrapper({ code, isLoading = false }: LivePrev
               className="mx-4 mt-4 rounded-md p-3 text-sm"
               style={{ backgroundColor: "#7f1d1d", color: "#fca5a5" }}
             />
-            <div className="flex-1 overflow-auto p-6">
+            <div className="flex-1 p-6">
               <LivePreview />
             </div>
           </div>
