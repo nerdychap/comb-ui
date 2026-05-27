@@ -16,12 +16,17 @@ These are **hard rules** for all code under `src/`.
 
 ### Folder Structure
 
+- **`src/app/`** — Next.js App Router pages and API routes
 - **`src/components/`** — React components (one concern per file)
-- **`src/context/`** — Context definitions (one concern per file: context object, type)
+- **`src/constants/`** — Shared constant values
+- **`src/context/`** — Context definitions (one file: context object + type)
 - **`src/hooks/`** — Custom React hooks
 - **`src/providers/`** — Context provider components
 - **`src/lib/`** — Utilities, parsers, shared logic
-- **`src/test/`** — Vitest unit tests
+- **`src/test/`** — Unit tests mirroring `src/` structure
+- **`e2e/`** — Playwright E2E tests
+- **`docs/`** — Project documentation (e.g., `implementation.md`)
+- **`.github/`** — CI workflows and instruction files
 
 ## Exports
 
@@ -40,6 +45,8 @@ These are **hard rules** for all code under `src/`.
 - **No anonymous arrow functions in JSX props.** Define named handler functions as variables or `useCallback` before the `return` statement.
 - ✅ `const handleSubmit = (e) => { ... }; return <form onSubmit={handleSubmit}>`
 - ❌ `return <form onSubmit={(e) => { ... }}>`
+- **Cancel/reset handlers inside `<form>` elements must call `e.preventDefault()`** to prevent React re-rendering (triggered by state changes inside the handler) from causing unintended form submission. This is a known pattern — the Cancel button changes DOM state within the same event cycle, which can produce a new submit button that the original event then activates.
+- ✅ `const handleCancel = (e: React.MouseEvent) => { e.preventDefault(); onCancel?.(); }`
 
 ## `"use client"` Directive
 
@@ -78,15 +85,17 @@ These are **hard rules** for all code under `src/`.
 ## CI / GitHub Actions
 
 - A **pull request workflow** (`.github/workflows/pull-request.yml`) runs on every PR to `main`.
-- It executes **lint**, **test**, and **build** steps in order using Node.js 20 with `npm ci`.
+- It executes **lint**, **test**, **Playwright E2E tests**, and **build** steps in order using Node.js 20 with `npm ci`.
+- Playwright browsers (Chromium) are installed before the E2E step.
 - Always verify the workflow passes locally before pushing: `npm run lint && npm test && npm run build`.
 
 ## Testing
 
-- **Vitest** as the test runner.
-- Unit tests for critical logic: stream parser, custom hooks, utilities.
-- No component or E2E tests.
-- Use `@testing-library/react` for hook tests with `renderHook`.
+- **Vitest** as the unit test runner.
+- **Playwright** for E2E tests in `e2e/`.
+- Unit tests cover critical logic: stream parser, custom hooks, utilities, components (using `@testing-library/react`).
+- E2E tests cover key user flows: rendering, submit, cancel, error states.
+- Use `@testing-library/react` for component and hook tests.
 
 ## Anti-patterns — Avoid
 
