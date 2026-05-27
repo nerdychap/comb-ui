@@ -7,12 +7,21 @@ applyTo: "src/**"
 
 These are **hard rules** for all code under `src/`.
 
-## File & Naming Conventions
+### Naming Conventions
 
 - **Files:** kebab-case (e.g., `live-preview-wrapper.tsx`, `use-stream.ts`, `stream-parser.ts`)
 - **React components:** PascalCase (`GeneratorView`, `PromptInput`)
 - **Hooks:** camelCase with `use` prefix (`useStream`, `useClipboard`, `useTheme`)
 - **Utilities/functions:** camelCase (`streamParser`, `cleanGeneratedCode`, `sanitizePrompt`)
+
+### Folder Structure
+
+- **`src/components/`** — React components (one concern per file)
+- **`src/context/`** — Context definitions (one concern per file: context object, type)
+- **`src/hooks/`** — Custom React hooks
+- **`src/providers/`** — Context provider components
+- **`src/lib/`** — Utilities, parsers, shared logic
+- **`src/test/`** — Vitest unit tests
 
 ## Exports
 
@@ -31,6 +40,11 @@ These are **hard rules** for all code under `src/`.
 - **No anonymous arrow functions in JSX props.** Define named handler functions as variables or `useCallback` before the `return` statement.
 - ✅ `const handleSubmit = (e) => { ... }; return <form onSubmit={handleSubmit}>`
 - ❌ `return <form onSubmit={(e) => { ... }}>`
+
+## `"use client"` Directive
+
+- Only add `"use client"` to **`.tsx` files** that use hooks, custom hooks, web/browser APIs, or event handlers.
+- Do **not** add `"use client"` to plain `.ts` files — they are not components.
 
 ## HTTP Requests
 
@@ -51,7 +65,8 @@ These are **hard rules** for all code under `src/`.
 
 ## State & Data Flow
 
-- **TanStack Query** for server state (streaming responses, prompt history, saved generations).
+- **Stream state** is shared via `StreamProvider` + `useStreamContext`. Wrap the relevant subtree at the top level so multiple components (e.g., `StreamCodeDisplay`, `GeneratorViewInner`) read from the same stream state.
+- **TanStack Query** for server state (prompt history, saved generations).
 - **React useState** for local UI state (prompt input, UI flags, copy status).
 
 ## Error Handling

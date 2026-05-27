@@ -1,41 +1,22 @@
 "use client";
 
+import { useStreamContext } from "@/hooks/use-stream-context";
 import { Highlight, themes, type Language } from "prism-react-renderer";
+import StreamEmptyState from "@/components/stream-empty-state";
+import StreamLoadingState from "@/components/stream-loading-state";
 
 const PANEL_BG = "#18181b";
 const PANEL_BORDER = "#3f3f46";
 
-type StreamComponentProps = {
-  content: string;
-  isLoading: boolean;
-};
+export default function StreamCodeDisplay() {
+  const { content, isLoading } = useStreamContext();
 
-export default function StreamComponent({ content, isLoading }: StreamComponentProps) {
   if (!content && !isLoading) {
-    return (
-      <div
-        className="flex flex-1 min-h-0 items-center justify-center rounded-lg border p-4"
-        style={{ backgroundColor: PANEL_BG, borderColor: PANEL_BORDER }}
-      >
-        <p className="text-sm" style={{ color: "#a1a1aa" }}>
-          Generated code will appear here...
-        </p>
-      </div>
-    );
+    return <StreamEmptyState />;
   }
 
   if (isLoading && !content) {
-    return (
-      <div
-        className="flex flex-1 min-h-0 items-center justify-center rounded-lg border p-4"
-        style={{ backgroundColor: PANEL_BG, borderColor: PANEL_BORDER }}
-      >
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 animate-pulse rounded-full" style={{ backgroundColor: "#71717a" }} />
-          <p className="text-sm" style={{ color: "#a1a1aa" }}>Waiting for response...</p>
-        </div>
-      </div>
-    );
+    return <StreamLoadingState />;
   }
 
   return (

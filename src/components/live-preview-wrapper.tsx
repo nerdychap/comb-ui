@@ -1,5 +1,3 @@
-"use client";
-
 import { ensureRenderCall } from "@/lib/ensure-render-call";
 import { LiveError, LivePreview, LiveProvider } from "react-live";
 import ErrorBoundary from "./error-boundary";

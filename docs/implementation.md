@@ -20,7 +20,7 @@
 
 # 4. Naming Conventions
 
-- **Files:** kebab‑case (live-preview.tsx, use-stream.ts, stream-component.ts)
+- **Files:** kebab‑case (live-preview.tsx, use-stream.ts, stream-code-display.ts)
 - **Components:** PascalCase (LivePreview, PromptInput)
 - **Hooks:** camelCase with use prefix (useStream)
 - **Utilities/functions:** camelCase (streamComponent, parseChunks)

@@ -8,18 +8,27 @@ Generate React components from text prompts. Describe what you want and watch th
 src/
 ├── app/api/generate/route.ts   # Streaming API endpoint (OpenRouter)
 ├── components/
-│   ├── prompt-input.tsx        # Prompt input form
-│   ├── stream-component.tsx    # Real-time code display
+│   ├── generator-view-inner.tsx # Main view with code & preview panes
+│   ├── generator-view.tsx       # Wraps inner view in StreamProvider
+│   ├── prompt-input.tsx         # Prompt input form
+│   ├── stream-code-display.tsx  # Real-time code display with states
+│   ├── stream-empty-state.tsx   # Empty placeholder state
+│   ├── stream-loading-state.tsx # Loading indicator state
 │   ├── live-preview-wrapper.tsx # react-live render panel
-│   └── error-boundary.tsx      # Error boundary for live preview
+│   └── error-boundary.tsx       # Error boundary for live preview
+├── context/
+│   └── stream-context.ts        # Context definition + type
+├── providers/
+│   └── stream-provider.tsx      # Provider component
 ├── hooks/
-│   ├── use-stream.ts           # Streaming state management hook
-│   └── use-clipboard.ts        # Clipboard copy hook
+│   ├── use-stream.ts            # Streaming state management hook
+│   ├── use-stream-context.tsx   # Consumer hook
+│   └── use-clipboard.ts         # Clipboard copy hook
 ├── lib/
-│   ├── stream-parser.ts        # SSE stream parser
-│   ├── rate-limiter.ts         # In-memory sliding window rate limiter
-│   └── sanitize.ts             # Prompt sanitization & HTML escaping
-└── test/                       # Vitest unit tests
+│   ├── stream-parser.ts         # SSE stream parser
+│   ├── rate-limiter.ts          # In-memory sliding window rate limiter
+│   └── sanitize.ts              # Prompt sanitization & HTML escaping
+└── test/                        # Vitest unit tests
 ```
 
 **Key technologies:**
