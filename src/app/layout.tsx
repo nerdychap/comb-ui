@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CombUI - AI Component Generator",
-  description: "Generate React+Tailwind components from text prompts",
+  description: "Generate React components from text prompts",
 };
 
 export default function RootLayout({
