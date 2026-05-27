@@ -2,16 +2,12 @@
 
 import GeneratorView from "@/components/generator-view";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useRef } from "react";
+
+const queryClient = new QueryClient();
 
 export default function Home() {
-  const queryClientRef = useRef<QueryClient | null>(null);
-  if (!queryClientRef.current) {
-    queryClientRef.current = new QueryClient();
-  }
-
   return (
-    <QueryClientProvider client={queryClientRef.current}>
+    <QueryClientProvider client={queryClient}>
       <GeneratorView />
     </QueryClientProvider>
   );
