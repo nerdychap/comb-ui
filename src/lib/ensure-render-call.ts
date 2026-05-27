@@ -3,11 +3,6 @@
  * - Strips import, export, and require statements (not available in sandbox)
  * - Ensures the code ends with a `render(<ComponentName />)` call
  */
-/**
- * Prepares code for react-live's noInline mode.
- * - Strips import, export, and require statements (not available in sandbox)
- * - Ensures the code ends with a `render(<ComponentName />)` call
- */
 export function ensureRenderCall(code: string): string {
   // Strip `import ... from ...` and `export ...` statements
   const cleaned = code
