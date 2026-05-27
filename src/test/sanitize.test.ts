@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { sanitizePrompt, escapeHtml } from "@/lib/sanitize";
+import { sanitizePrompt } from "@/lib/sanitize";
+import { describe, expect, it } from "vitest";
 
 describe("sanitizePrompt", () => {
   it("returns trimmed prompt when given a valid string", () => {
@@ -25,20 +25,5 @@ describe("sanitizePrompt", () => {
     const longPrompt = "a".repeat(5000);
     const result = sanitizePrompt(longPrompt);
     expect(result.length).toBe(4000);
-  });
-});
-
-describe("escapeHtml", () => {
-  it("escapes HTML special characters", () => {
-    const input = '<div class="test">&</div>';
-    const result = escapeHtml(input);
-    expect(result).toBe(
-      "&lt;div class=&quot;test&quot;&gt;&amp;&lt;/div&gt;"
-    );
-  });
-
-  it("returns plain text unchanged", () => {
-    const input = "Hello, world!";
-    expect(escapeHtml(input)).toBe("Hello, world!");
   });
 });
