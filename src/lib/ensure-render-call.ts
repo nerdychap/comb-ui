@@ -21,9 +21,7 @@ export function ensureRenderCall(code: string): string {
   }
 
   // Match: `function ComponentName(...)` or `const ComponentName = ...`
-  const fnMatch = cleaned.match(
-    /(?:export\s+)?(?:function|const)\s+(\w+)\s*(?:[=:]|$)/
-  );
+  const fnMatch = cleaned.match(/(?:export\s+)?(?:function|const)\s+(\w+)\s*(?:[=:]|$)/);
   if (fnMatch) {
     const componentName = fnMatch[1];
 

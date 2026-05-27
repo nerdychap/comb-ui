@@ -10,9 +10,7 @@ export function rateLimiter(identifier: string): boolean {
   const now = Date.now();
   const entries = store.get(identifier) ?? [];
 
-  const activeEntries = entries.filter(
-    (entry) => now - entry.timestamp < WINDOW_MS
-  );
+  const activeEntries = entries.filter((entry) => now - entry.timestamp < WINDOW_MS);
 
   if (activeEntries.length >= MAX_REQUESTS) {
     store.set(identifier, activeEntries);

@@ -46,8 +46,7 @@ export function streamParser(response: Response, callbacks: StreamCallbacks): Ab
 
           try {
             const parsed = JSON.parse(data);
-            const token: string | undefined =
-              parsed.choices?.[0]?.delta?.content;
+            const token: string | undefined = parsed.choices?.[0]?.delta?.content;
 
             if (token) {
               callbacks.onToken(token);
@@ -61,9 +60,7 @@ export function streamParser(response: Response, callbacks: StreamCallbacks): Ab
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
-      callbacks.onError(
-        error instanceof Error ? error : new Error("Stream parsing failed")
-      );
+      callbacks.onError(error instanceof Error ? error : new Error("Stream parsing failed"));
     }
   }
 

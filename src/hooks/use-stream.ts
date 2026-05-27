@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef } from "react";
-import { streamParser } from "@/lib/stream-parser";
 import { cleanGeneratedCode } from "@/lib/clean-generated-code";
+import { streamParser } from "@/lib/stream-parser";
+import { useCallback, useRef, useState } from "react";
 
 type UseStreamResult = {
   content: string;

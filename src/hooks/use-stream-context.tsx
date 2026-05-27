@@ -1,7 +1,7 @@
 "use client";
 
-import { useContext } from "react";
 import { StreamContext, type StreamContextValue } from "@/context/stream-context";
+import { useContext } from "react";
 
 export function useStreamContext(): StreamContextValue {
   const ctx = useContext(StreamContext);

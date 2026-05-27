@@ -1,6 +1,6 @@
+import ErrorBoundary from "@/components/error-boundary";
 import { ensureRenderCall } from "@/lib/ensure-render-call";
 import { LiveError, LivePreview, LiveProvider } from "react-live";
-import ErrorBoundary from "./error-boundary";
 
 const PANEL_BG = "#18181b";
 

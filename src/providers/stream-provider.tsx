@@ -1,8 +1,8 @@
 "use client";
 
-import { type ReactNode } from "react";
-import { useStream } from "@/hooks/use-stream";
 import { StreamContext } from "@/context/stream-context";
+import { useStream } from "@/hooks/use-stream";
+import { type ReactNode } from "react";
 
 type StreamProviderProps = {
   children: ReactNode;
@@ -11,9 +11,5 @@ type StreamProviderProps = {
 export function StreamProvider({ children }: StreamProviderProps) {
   const stream = useStream();
 
-  return (
-    <StreamContext.Provider value={stream}>
-      {children}
-    </StreamContext.Provider>
-  );
+  return <StreamContext.Provider value={stream}>{children}</StreamContext.Provider>;
 }
