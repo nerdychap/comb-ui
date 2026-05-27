@@ -30,4 +30,35 @@ describe("rateLimiter", () => {
     expect(rateLimiter("user-a")).toBe(false);
     expect(rateLimiter("user-b")).toBe(true);
   });
+
+  it("allows the 20th request and blocks the 21st", () => {
+    for (let i = 0; i < 20; i++) {
+      const allowed = rateLimiter("edge-user");
+      if (i < 19) {
+        expect(allowed).toBe(true);
+      } else {
+        // 20th request (index 19) — still allowed (0-indexed: entries 0-19 = 20 total)
+        expect(allowed).toBe(true);
+      }
+    }
+
+    expect(rateLimiter("edge-user")).toBe(false);
+  });
+
+  it("handles requests with empty string identifier", () => {
+    for (let i = 0; i < 20; i++) {
+      expect(rateLimiter("")).toBe(true);
+    }
+
+    expect(rateLimiter("")).toBe(false);
+  });
+
+  it("handles requests with special character identifiers", () => {
+    expect(rateLimiter("user@123!")).toBe(true);
+  });
+
+  it("handles very long identifier strings", () => {
+    const longId = "a".repeat(1000);
+    expect(rateLimiter(longId)).toBe(true);
+  });
 });
