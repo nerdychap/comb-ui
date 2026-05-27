@@ -1,6 +1,6 @@
 # CombUI - AI Component Generator
 
-Generate React+Tailwind components from text prompts. Describe what you want and watch the component come to life in real time with streaming code generation and a live preview.
+Generate React components from text prompts. Describe what you want and watch the component come to life in real time with streaming code generation and a live preview.
 
 ## Architecture
 
