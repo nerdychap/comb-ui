@@ -51,7 +51,7 @@ export default function GeneratorViewInner() {
 
       <ResizableSplit
         left={
-          <div className="flex min-h-75 max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
+          <div className="flex min-h-75 max-h-[40vh] md:max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Code</h2>
 
@@ -68,7 +68,7 @@ export default function GeneratorViewInner() {
           </div>
         }
         right={
-          <div className="flex min-h-75 max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
+          <div className="flex min-h-75 max-h-[40vh] md:max-h-[80vh] flex-col gap-2 overflow-hidden lg:min-h-0">
             <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Preview</h2>
             <LivePreviewWrapper code={!isLoading ? content : ""} isLoading={isLoading} />
           </div>
