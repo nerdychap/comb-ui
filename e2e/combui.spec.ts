@@ -44,6 +44,16 @@ test.describe("CombUI page", () => {
   });
 
   test("typing a prompt and pressing generate submits it", async ({ page }) => {
+    await page.route("**/api/generate", async (route) => {
+      await new Promise((r) => setTimeout(r, 5000));
+      const payload = JSON.stringify({ choices: [{ delta: { content: "test" } }] });
+      await route.fulfill({
+        status: 200,
+        headers: { "Content-Type": "text/event-stream" },
+        body: `data: ${payload}\n\ndata: [DONE]\n\n`,
+      });
+    });
+
     const input = page.getByPlaceholder(/describe the component/i);
     await input.fill("a blue button");
     await page.getByRole("button", { name: /generate/i }).click();
