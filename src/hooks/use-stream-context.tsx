@@ -1,5 +1,3 @@
-"use client";
-
 import { StreamContext, type StreamContextValue } from "@/context/stream-context";
 import { useContext } from "react";
 
