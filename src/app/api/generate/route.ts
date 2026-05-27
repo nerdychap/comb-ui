@@ -1,6 +1,6 @@
-import { NextRequest } from "next/server";
-import { sanitizePrompt } from "@/lib/sanitize";
 import { rateLimiter } from "@/lib/rate-limiter";
+import { sanitizePrompt } from "@/lib/sanitize";
+import { NextRequest } from "next/server";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
@@ -47,6 +47,11 @@ export async function POST(request: NextRequest) {
           },
         ],
         stream: true,
+        reasoning: {
+          enabled: true,
+          effort: "low",
+          exclude: true,
+        },
       }),
     });
 
