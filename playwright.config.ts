@@ -11,8 +11,7 @@ export default defineConfig({
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
     launchOptions: {
-      // Slow down actions by 100ms to better observe test execution
-      slowMo: 2000,
+      slowMo: process.env.CI ? 0 : 100,
     },
   },
 

@@ -3,8 +3,10 @@ import { StreamProvider } from "@/providers/stream-provider";
 
 export default function Home() {
   return (
-    <StreamProvider>
-      <GeneratorView />
-    </StreamProvider>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <StreamProvider>
+        <GeneratorView />
+      </StreamProvider>
+    </div>
   );
 }
