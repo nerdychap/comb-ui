@@ -1,14 +1,12 @@
-"use client";
-
 import GeneratorView from "@/components/generator-view";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { StreamProvider } from "@/providers/stream-provider";
 
 export default function Home() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <GeneratorView />
-    </QueryClientProvider>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <StreamProvider>
+        <GeneratorView />
+      </StreamProvider>
+    </div>
   );
 }

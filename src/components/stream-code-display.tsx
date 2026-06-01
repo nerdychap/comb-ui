@@ -2,7 +2,7 @@
 
 import StreamEmptyState from "@/components/stream-empty-state";
 import StreamLoadingState from "@/components/stream-loading-state";
-import { PANEL_BG, PANEL_BORDER } from "@/constants/contants";
+import { PANEL_BG, PANEL_BORDER } from "@/constants/constants";
 import { useStreamContext } from "@/hooks/use-stream-context";
 import { Highlight, themes, type Language } from "prism-react-renderer";
 import { useEffect, useRef } from "react";
@@ -12,8 +12,10 @@ export default function StreamCodeDisplay() {
   const preRef = useRef<HTMLPreElement>(null);
 
   useEffect(() => {
-    if (!isLoading || !preRef.current) return;
-    preRef.current.scrollTop = preRef.current.scrollHeight;
+    if (!preRef.current) return;
+    if (isLoading) {
+      preRef.current.scrollTop = preRef.current.scrollHeight;
+    }
   }, [content, isLoading]);
 
   if (!content && !isLoading) {
@@ -37,7 +39,7 @@ export default function StreamCodeDisplay() {
               borderColor: PANEL_BORDER,
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
-              overflowWrap: "break-word",
+              overflowY: "auto",
             }}
           >
             <code>
