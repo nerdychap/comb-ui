@@ -23,27 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem("combui-theme");
-                  if (theme === "dark") {
-                    document.documentElement.classList.add("dark");
-                  }
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">{children}</body>
     </html>
   );

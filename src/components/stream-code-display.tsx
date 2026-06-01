@@ -37,7 +37,7 @@ export default function StreamCodeDisplay() {
               borderColor: PANEL_BORDER,
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
-              overflowWrap: "break-word",
+              overflowY: "auto",
             }}
           >
             <code>
