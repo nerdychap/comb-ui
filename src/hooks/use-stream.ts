@@ -2,11 +2,19 @@ import { cleanGeneratedCode } from "@/lib/clean-generated-code";
 import { streamParser } from "@/lib/stream-parser";
 import { useCallback, useRef, useState } from "react";
 
+export type StreamOptions = {
+  currentCode?: string;
+};
+
 type UseStreamResult = {
   content: string;
+  /** Code of the last generation that finished. It does not change while a new one streams. */
+  completedContent: string;
+  /** Number of generations that finished with code. */
+  completedCount: number;
   isLoading: boolean;
   error: string | null;
-  startStream: (prompt: string) => void;
+  startStream: (prompt: string, options?: StreamOptions) => void;
   abortStream: () => void;
   resetStream: () => void;
 };
@@ -16,30 +24,50 @@ export function useStream(): UseStreamResult {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const rawRef = useRef("");
+  // Code from the last generation that finished. Cancel and errors restore it,
+  // so a failed refine does not discard the user's component.
+  const lastCompleteRef = useRef("");
+  const [completedContent, setCompletedContent] = useState("");
+  const [completedCount, setCompletedCount] = useState(0);
 
-  const abortStream = useCallback(() => {
+  const stopRequest = useCallback(() => {
     if (abortRef.current) {
       abortRef.current.abort();
       abortRef.current = null;
     }
-    setIsLoading(false);
-    setContent("");
-    setError(null);
   }, []);
 
+  const abortStream = useCallback(() => {
+    stopRequest();
+    setIsLoading(false);
+    setContent(lastCompleteRef.current);
+    setError(null);
+  }, [stopRequest]);
+
   const startStream = useCallback(
-    async (prompt: string) => {
-      abortStream();
+    async (prompt: string, options?: StreamOptions) => {
+      stopRequest();
       setIsLoading(true);
+      setContent("");
+      setError(null);
+      rawRef.current = "";
 
       const controller = new AbortController();
       abortRef.current = controller;
+
+      const fail = (message: string) => {
+        setError(message);
+        setIsLoading(false);
+        setContent(lastCompleteRef.current);
+        abortRef.current = null;
+      };
 
       try {
         const response = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
+          body: JSON.stringify({ prompt, currentCode: options?.currentCode }),
           signal: controller.signal,
         });
 
@@ -51,28 +79,32 @@ export function useStream(): UseStreamResult {
           } catch {
             // ignore JSON parse errors on error responses
           }
-          setError(errorMessage);
-          setIsLoading(false);
-          abortRef.current = null;
+          fail(errorMessage);
           return;
         }
 
         streamParser(response, {
           onToken: (token: string) => {
-            setContent((prev) => {
-              const next = prev + token;
-              return cleanGeneratedCode(next);
-            });
+            // Clean the full raw text each time. Cleaning the already-cleaned
+            // text would trim the trailing newline of every token.
+            rawRef.current += token;
+            setContent(cleanGeneratedCode(rawRef.current));
           },
           onDone: () => {
+            const finalCode = cleanGeneratedCode(rawRef.current);
+            if (finalCode) {
+              lastCompleteRef.current = finalCode;
+              setCompletedContent(finalCode);
+              setCompletedCount((count) => count + 1);
+            } else {
+              setContent(lastCompleteRef.current);
+            }
             setIsLoading(false);
             abortRef.current = null;
           },
           onError: (err: Error) => {
             console.error("Stream error:", err);
-            setError("Failed to generate component. Please try again.");
-            setIsLoading(false);
-            abortRef.current = null;
+            fail("Failed to generate component. Please try again.");
           },
         });
       } catch (err) {
@@ -81,17 +113,24 @@ export function useStream(): UseStreamResult {
         }
 
         console.error("Stream request error:", err);
-        setError("An unexpected error occurred");
-        setIsLoading(false);
-        abortRef.current = null;
+        fail("An unexpected error occurred");
       }
     },
-    [abortStream]
+    [stopRequest]
   );
 
   const resetStream = useCallback(() => {
     abortStream();
   }, [abortStream]);
 
-  return { content, isLoading, error, startStream, abortStream, resetStream };
+  return {
+    content,
+    completedContent,
+    completedCount,
+    isLoading,
+    error,
+    startStream,
+    abortStream,
+    resetStream,
+  };
 }

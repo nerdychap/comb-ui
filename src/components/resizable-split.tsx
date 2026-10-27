@@ -11,17 +11,19 @@ type ResizableSplitProps = {
 export default function ResizableSplit({ left, right }: ResizableSplitProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [splitRatio, setSplitRatio] = useState(50);
-  const isDragging = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const isDraggingRef = useRef(false);
 
   const handleMouseDown = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
-    isDragging.current = true;
+    isDraggingRef.current = true;
+    setIsDragging(true);
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
   }, []);
 
   const handleMouseMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging.current || !containerRef.current) return;
+    if (!isDraggingRef.current || !containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
     const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
@@ -32,10 +34,22 @@ export default function ResizableSplit({ left, right }: ResizableSplitProps) {
   }, []);
 
   const handleMouseUp = useCallback(() => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    setIsDragging(false);
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setSplitRatio((ratio) => Math.max(MIN_RATIO, ratio - 4));
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setSplitRatio((ratio) => Math.min(MAX_RATIO, ratio + 4));
+    }
   }, []);
 
   useEffect(() => {
@@ -56,26 +70,37 @@ export default function ResizableSplit({ left, right }: ResizableSplitProps) {
   return (
     <div
       ref={containerRef}
-      className="flex flex-1 flex-col gap-4 overflow-hidden lg:flex-row lg:gap-0"
+      className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden md:flex-row md:gap-0"
     >
-      <div
-        className="flex min-h-0 flex-col gap-2 overflow-hidden"
-        style={{ flex: `${splitRatio} 1 0%` }}
-      >
+      <div className="flex min-h-0 flex-col overflow-hidden" style={{ flex: `${splitRatio} 1 0%` }}>
         {left}
       </div>
 
       <div
-        className="hidden cursor-col-resize items-center justify-center lg:flex"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize code and preview panels"
+        aria-valuemin={MIN_RATIO}
+        aria-valuemax={MAX_RATIO}
+        aria-valuenow={Math.round(splitRatio)}
+        tabIndex={0}
+        className="group hidden cursor-col-resize items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex"
         style={{ width: HANDLE_WIDTH, minWidth: HANDLE_WIDTH }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
+        onKeyDown={handleKeyDown}
       >
-        <div className="h-16 w-0.5 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+        <div
+          className={`h-12 w-1 rounded-full transition-colors ${
+            isDragging
+              ? "bg-accent"
+              : "bg-zinc-300 group-focus-visible:bg-accent hover:bg-zinc-400 dark:bg-zinc-600 dark:hover:bg-zinc-500"
+          }`}
+        />
       </div>
 
       <div
-        className="flex min-h-0 flex-col gap-2 overflow-hidden"
+        className="order-first flex min-h-0 flex-col overflow-hidden md:order-none"
         style={{ flex: `${100 - splitRatio} 1 0%` }}
       >
         {right}

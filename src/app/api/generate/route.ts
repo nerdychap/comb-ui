@@ -1,11 +1,29 @@
+import { isAllowedOrigin } from "@/lib/is-allowed-origin";
 import { rateLimiter } from "@/lib/rate-limiter";
+import { sanitizeCode } from "@/lib/sanitize-code";
 import { sanitizePrompt } from "@/lib/sanitize";
 import { NextRequest } from "next/server";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const DEFAULT_MODEL = "deepseek/deepseek-v4.1-flash-1017";
+
+function buildUserMessage(prompt: string, currentCode?: string): string {
+  if (currentCode) {
+    return `Here is the current component code:\n\n${currentCode}\n\nUpdate it with this change request. Keep everything that the request does not mention. Return the complete updated code and end it with \`render(<YourComponent />)\`:\n\n${prompt}`;
+  }
+
+  return `Generate a React component with inline styles for the following description. Remember to end the code with \`render(<YourComponent />)\`:\n\n${prompt}`;
+}
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isAllowedOrigin(request.headers.get("origin"), request.headers.get("host"))) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "anonymous";
 
     if (!rateLimiter(clientIp)) {
@@ -17,6 +35,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const prompt = sanitizePrompt(body.prompt);
+    const currentCode = sanitizeCode(body.currentCode);
 
     const apiKey = process.env.OPENROUTER_API_KEY;
 
@@ -34,7 +53,7 @@ export async function POST(request: NextRequest) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: process.env.AI_MODEL || "deepseek/deepseek-v4-flash",
+        model: process.env.AI_MODEL || DEFAULT_MODEL,
         messages: [
           {
             role: "system",
@@ -43,7 +62,7 @@ export async function POST(request: NextRequest) {
           },
           {
             role: "user",
-            content: `Generate a React component with inline styles for the following description. Remember to end the code with \`render(<YourComponent />)\`:\n\n${prompt}`,
+            content: buildUserMessage(prompt, currentCode),
           },
         ],
         stream: true,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
@@ -20,7 +20,19 @@ function getInitialTheme(): Theme {
   return "light";
 }
 
+function subscribeNoop(): () => void {
+  return () => {};
+}
+
 export function useTheme(): UseThemeResult {
+  // False only while React hydrates the server HTML. The server cannot read
+  // localStorage, so the hydration render must report the server theme.
+  // The next render reports the stored theme and fixes the toggle label.
+  const isHydrated = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  );
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
@@ -37,5 +49,5 @@ export function useTheme(): UseThemeResult {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
-  return { theme, toggleTheme };
+  return { theme: isHydrated ? theme : "light", toggleTheme };
 }

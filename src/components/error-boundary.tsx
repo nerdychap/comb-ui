@@ -5,6 +5,7 @@ import { Component, ReactNode } from "react";
 type ErrorBoundaryProps = {
   children: ReactNode;
   fallback?: ReactNode;
+  onError?: (error: Error) => void;
 };
 
 type ErrorBoundaryState = {
@@ -24,6 +25,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
   componentDidCatch(error: Error) {
     console.error("ErrorBoundary caught:", error);
+    this.props.onError?.(error);
   }
 
   render() {
@@ -33,13 +35,14 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
       }
 
       return (
-        <div className="flex items-center justify-center h-full p-8">
-          <div className="text-center">
-            <p className="text-red-500 font-medium text-lg mb-2">
+        <div className="flex h-full items-center justify-center p-8">
+          <div className="max-w-sm text-center">
+            <p className="mb-2 text-lg font-medium text-red-600 dark:text-red-400">
               Component render error
             </p>
-            <p className="text-zinc-500 text-sm">
-              {this.state.error?.message ?? "An unexpected error occurred while rendering the component."}
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              {this.state.error?.message ??
+                "An unexpected error occurred while rendering the component."}
             </p>
           </div>
         </div>

@@ -8,7 +8,7 @@ type StreamStatePanelProps = {
 export default function StreamStatePanel({ children }: StreamStatePanelProps) {
   return (
     <div
-      className="flex flex-1 min-h-0 items-center justify-center rounded-lg border p-4"
+      className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border border-dashed p-6 text-center"
       style={{ backgroundColor: PANEL_BG, borderColor: PANEL_BORDER }}
     >
       {children}

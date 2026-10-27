@@ -15,9 +15,13 @@ src/
 │   ├── error-boundary.tsx         # Class error boundary for live preview
 │   ├── generator-view.tsx         # Wraps inner view in StreamProvider
 │   ├── generator-view-inner.tsx   # Main view: prompt, code & preview panes
-│   ├── live-preview-wrapper.tsx   # react-live render panel
+│   ├── live-preview-wrapper.tsx   # Preview placeholders + sandboxed preview host
+│   ├── preview-error.tsx          # Preview error bar with "Fix with AI"
+│   ├── preview-error-reporter.tsx # Sends react-live errors from the iframe to the app
+│   ├── preview-sandbox.tsx        # react-live renderer that runs inside the iframe
 │   ├── prompt-input.tsx           # Prompt form with Cancel support
 │   ├── resizable-split.tsx        # Draggable split pane for code/preview
+│   ├── sandboxed-preview.tsx      # Sandboxed iframe + postMessage bridge
 │   ├── stream-code-display.tsx    # Real-time code display with states
 │   ├── stream-empty-state.tsx     # Empty placeholder state
 │   ├── stream-loading-state.tsx   # Loading indicator state
@@ -35,9 +39,14 @@ src/
 ├── lib/
 │   ├── clean-generated-code.ts    # Post-processing of LLM output
 │   ├── ensure-render-call.ts      # Ensures render() call in generated code
+│   ├── is-allowed-origin.ts       # Rejects cross-origin and "null" origin API calls
+│   ├── preview-messages.ts        # Message types between the app and the iframe
 │   ├── rate-limiter.ts            # In-memory sliding window rate limiter
 │   ├── sanitize.ts                # Prompt sanitization & HTML escaping
+│   ├── sanitize-code.ts           # Validates current code for refine requests
 │   └── stream-parser.ts           # SSE stream parser (AbortSignal-aware)
+├── preview-runtime/
+│   └── main.tsx                   # Entry for public/preview-runtime.js (npm run build:preview)
 ├── providers/
 │   └── stream-provider.tsx        # Stream context provider
 └── test/
@@ -66,7 +75,7 @@ e2e/
 
 **Key technologies:**
 - **Next.js 16 (App Router)** — single application, no separate backend
-- **OpenRouter API** — streaming LLM completions (Gemini Flash)
+- **OpenRouter API** — streaming LLM completions (DeepSeek V4.1 Flash by default; set `AI_MODEL` to override)
 - **react-live** — renders generated code in a live preview panel
 - **TanStack Query** — server state management
 - **Tailwind CSS v4** — utility-first styling

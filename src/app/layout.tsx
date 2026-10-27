@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,23 +29,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem("combui-theme");
-                  if (theme === "dark") {
-                    document.documentElement.classList.add("dark");
-                  }
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
-      <body className="flex min-h-full flex-col bg-zinc-50 dark:bg-black">{children}</body>
+      <body className="flex h-full flex-col bg-background font-sans text-foreground">
+        <Script id="combui-theme" strategy="beforeInteractive">
+          {`(function(){try{if(localStorage.getItem("combui-theme")==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }

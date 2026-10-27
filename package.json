@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run build:preview",
     "dev": "next dev",
+    "prebuild": "npm run build:preview",
     "build": "next build",
+    "build:preview": "vite build -c vite.preview.config.ts",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
@@ -38,6 +41,7 @@
     "prettier": "^3.8.3",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vite": "^8.0.14",
     "vitest": "^4.1.7"
   }
 }
