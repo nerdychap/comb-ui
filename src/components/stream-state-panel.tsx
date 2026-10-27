@@ -1,4 +1,4 @@
-import { PANEL_BG, PANEL_BORDER } from "@/constants/contants";
+import { PANEL_BG, PANEL_BORDER } from "@/constants/constants";
 import type { ReactNode } from "react";
 
 type StreamStatePanelProps = {

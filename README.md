@@ -10,11 +10,10 @@ src/
 │   ├── api/generate/route.ts   # Streaming API endpoint (OpenRouter)
 │   ├── globals.css                # Global Tailwind styles
 │   ├── layout.tsx                 # Root layout
-│   └── page.tsx                   # Entry page (wraps QueryClient + GeneratorView)
+│   └── page.tsx                   # Entry page (wraps StreamProvider + GeneratorView)
 ├── components/
 │   ├── error-boundary.tsx         # Class error boundary for live preview
-│   ├── generator-view.tsx         # Wraps inner view in StreamProvider
-│   ├── generator-view-inner.tsx   # Main view: prompt, code & preview panes
+│   ├── generator-view.tsx         # Main view: prompt, code & preview panes
 │   ├── live-preview-wrapper.tsx   # Preview placeholders + sandboxed preview host
 │   ├── preview-error.tsx          # Preview error bar with "Fix with AI"
 │   ├── preview-error-reporter.tsx # Sends react-live errors from the iframe to the app
@@ -28,7 +27,7 @@ src/
 │   ├── stream-state-panel.tsx     # Streaming status overview panel
 │   └── theme-toggle.tsx           # Dark/light mode toggle
 ├── constants/
-│   └── contants.ts                # Shared constants
+│   └── constants.ts               # Shared constants
 ├── context/
 │   └── stream-context.ts          # Stream context definition + type
 ├── hooks/

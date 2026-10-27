@@ -1,6 +1,6 @@
 "use client";
 
-import { HANDLE_WIDTH, MAX_RATIO, MIN_RATIO } from "@/constants/contants";
+import { HANDLE_WIDTH, MAX_RATIO, MIN_RATIO } from "@/constants/constants";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
 type ResizableSplitProps = {
