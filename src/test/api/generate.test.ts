@@ -120,7 +120,7 @@ describe("POST /api/generate", () => {
 
     const fetchCall = fetchSpy.mock.calls[0];
     const body = JSON.parse(fetchCall[1]!.body as string);
-    expect(body.model).toBe("deepseek/deepseek-v4-flash");
+    expect(body.model).toBe("deepseek/deepseek-v4.1-flash-1017");
 
     fetchSpy.mockRestore();
   });
